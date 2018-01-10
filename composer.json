@@ -3,9 +3,7 @@
   "description": "多媒体模块,多媒体文件的上传与管理",
   "type": "wula-module",
   "require": {
-	"wula/wula-installer": "^1.0",
-	"wula/ui": "*",
-	"wulacms/dashboard": "*"
+	"wula/wula-installer": "^1.0"
   },
   "license": "MIT",
   "authors": [
