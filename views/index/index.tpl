@@ -96,14 +96,14 @@
     </section>
 
 
-    <aside class="aside aside-md b-r ">
+    <aside class="aside aside-lg b-r ">
         <section class="vbox stretch">
             <div class="layui-fluid" id="flu" style="display: none;">
                 <div class="layui-col-md12">
                    <img src="" id="preview">
                 </div>
 
-                <section class="panel panel-default" style="padding-top: 100px;">
+                <section class="panel panel-default" style="padding-top: 20px;">
                     <h4 class="font-thin padder">About This</h4>
                     <ul class="list-group">
                         <li class="list-group-item">
@@ -145,18 +145,18 @@
 		$('[data-table-form="#core-admin-table"]').submit();
 		return false;
 	}).on('click','tr',function () {
-		  $('#flu').show();
           var url_path = $(this).data('url');
           var size = $(this).data('size');
           var width = $(this).data('width');
           var height = $(this).data('height');
-
-          $('#preview').attr('src','/'+url_path);
-          $('#pre').attr('href','/'+url_path);
-          $('#size').text(size/1000+'k');
-          $('#width').text(width+'px');
-          $('#height').text(height+'px');
-         //alert(url_path);
+          if(url_path) {
+			  $('#flu').show();
+			  $('#preview').attr('src', '/' + url_path);
+			  $('#pre').attr('href', '/' + url_path);
+			  $('#size').text(size / 1000 + 'k');
+			  $('#width').text(width + 'px');
+			  $('#height').text(height + 'px');
+		  }
         });
 	var upload = layui.upload;
 
