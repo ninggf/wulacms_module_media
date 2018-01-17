@@ -54,7 +54,7 @@
                                                 class="fa fa-trash"></i> 删除</a>
                                 </div>
                             </div>
-                            <div class="col-sm-6 m-b-xs text-right">
+                            <div class="col-sm-5 m-b-xs text-right">
                                 <form data-table-form="#core-admin-table" class="form-inline">
                                     <input type="hidden" id="admin-role-id" name="type" value=""/>
                                     <div class="input-group input-group-sm">
@@ -64,6 +64,9 @@
                         </span>
                                     </div>
                                 </form>
+                            </div>
+                            <div class="col-sm-1 m-b-xs text-right">
+                            <a id="tog" href="#aside" data-toggle="class:show" class="btn btn-sm btn-success edit-admin"><i class="fa fa-mail-forward (alias)" ></i></a>
                             </div>
                         </div>
                     </header>
@@ -94,11 +97,9 @@
             <aside class="aside hidden" id="acl-space"></aside>
         </section>
     </section>
-
-
-    <aside class="aside aside-lg b-r ">
-        <section class="vbox stretch">
-            <div class="layui-fluid" id="flu" style="display: none;">
+    <aside class="aside-lg bg-white b-l hide" id="aside">
+        <section class="vbox stretch" >
+            <div class="layui-fluid"  id="flu" style="display: none;">
                 <div class="layui-col-md12">
                    <img src="" id="preview">
                 </div>
@@ -157,7 +158,16 @@
 			  $('#width').text(width + 'px');
 			  $('#height').text(height + 'px');
 		  }
-        });
+        }).on('click','#tog',function () {
+            var left = $('#tog').find('i').hasClass('fa fa-mail-forward (alias)');
+            if(left){
+                $('#tog').find('i').removeClass('fa fa-mail-forward (alias)');
+                $('#tog').find('i').addClass('fa fa-mail-reply (alias)');
+            }else {
+                $('#tog').find('i').removeClass('fa fa-mail-reply (alias)');
+                $('#tog').find('i').addClass('fa fa-mail-forward (alias)');
+            }
+	});
 	var upload = layui.upload;
 
 	//执行实例
