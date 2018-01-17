@@ -10,7 +10,7 @@
 
 defined('APPROOT') or header('Page Not Found', true, 404) || die();
 
-$tables['1.0.0'][] = "CREATE TABLE `media` (
+$tables['1.0.0'][] = "CREATE TABLE `{prefix}media` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传用户',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传时间',
@@ -25,4 +25,4 @@ $tables['1.0.0'][] = "CREATE TABLE `media` (
   PRIMARY KEY (`id`),
   KEY `IDX_UID` (`uid`),
   KEY `IDX_TYPE` (`type`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='媒体库'";
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='媒体库'";
