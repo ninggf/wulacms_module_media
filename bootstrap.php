@@ -1,41 +1,67 @@
 <?php
-/**
- * 多媒体模块引导文件.
- *
- * (c) Leo Ning <windywany@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
 namespace media;
 
 use wula\cms\CmfModule;
 use wulaphp\app\App;
+use backend\classes\DashboardUI;
 
 /**
- * Class MediaModule
- * @package media
- * @group   core
+ * 系统内核模块.
+ *
+ * @group cms
  */
-class MediaModule extends CmfModule {
+class Media1Module extends CmfModule {
 	public function getName() {
-		return '多媒体';
+		return '媒体库';
 	}
 
 	public function getDescription() {
-		return '多媒体文件的上传与管理';
+		return '为系统提供媒体库功能';
 	}
 
 	public function getHomePageURL() {
 		return 'https://www.wulacms.com/modules/media';
 	}
 
+	public function getAuthor() {
+		return 'David Wang';
+	}
+
 	public function getVersionList() {
-		$v['1.0.0'] = '';
+		$v['1.0.0'] = '初始版本';
 
 		return $v;
 	}
+
+	/**
+	 * @param \backend\classes\DashboardUI $ui
+	 *
+	 * @bind dashboard\initUI
+	 */
+	public static function initUI(DashboardUI $ui) {
+		$passport = whoami('admin');
+		if ($passport->cando('m:media')) {
+			$menu       = $ui->getMenu('media', '媒体库');
+			$menu->icon = '&#xe60b;';
+			if ($passport->cando('m:media')) {
+				$list              = $menu->getMenu('index', '媒体');
+				$list->icon        = '&#xe60b;';
+				$list->data['url'] = App::url('media/index');
+			}
+		}
+	}
+
+	/**
+	 * @param \wulaphp\auth\AclResourceManager $manager
+	 *
+	 * @bind rbac\initAdminManager
+	 */
+	public static function initAcl($manager) {
+		$acl = $manager->getResource('media', '媒体库', 'm');
+		$acl->addOperate('index', '媒体');
+	}
+
 }
 
-App::register(new MediaModule());
+App::register(new Media1Module());
