@@ -17,7 +17,7 @@
             {/if}
         </td>
         <td>{$row.filename}</td>
-        <td>{$row.url}</td>
+        <td>{$row.size/1000}k</td>
 
         <td class="text-right">
 

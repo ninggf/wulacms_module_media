@@ -66,7 +66,7 @@
                                 </form>
                             </div>
                             <div class="col-sm-1 m-b-xs text-right">
-                            <a id="tog" href="#aside" data-toggle="class:show" class="btn btn-sm btn-icon btn-info"><i class="fa fa-arrow-circle-right" ></i></a>
+                            <a id="tog" href="#aside" data-toggle="class:show" class="btn btn-sm btn-success"><i class="fa fa-arrow-circle-right" ></i></a>
                             </div>
                         </div>
                     </header>
@@ -76,13 +76,13 @@
                                    style="min-width: 800px">
                                 <thead>
                                 <tr>
-                                    <th width="20">
+                                    <th width="80">
                                         <input type="checkbox" class="grp"/>
                                     </th>
-                                    <th width="160" data-sort="id,d">ID</th>
-                                    <th width="160">展示</th>
+                                    <th width="180" data-sort="id,d">ID</th>
+                                    <th width="180">展示</th>
                                     <th width="200" data-sort="filename,a">文件名</th>
-                                    <th width="200" data-sort="type,a">URL</th>
+                                    <th width="200" data-sort="size,a">文件大小</th>
 
                                 </tr>
                                 </thead>
@@ -97,7 +97,7 @@
             <aside class="aside hidden" id="acl-space"></aside>
         </section>
     </section>
-    <aside class="aside-lg bg-white b-l hide" id="aside">
+    <aside class="aside-lg bg-white  hide" id="aside">
         <section class="vbox stretch" >
             <div class="layui-fluid"  id="flu" style="display: none;">
                 <div class="layui-col-md12">
