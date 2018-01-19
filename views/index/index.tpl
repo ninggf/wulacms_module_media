@@ -79,10 +79,10 @@
                                     <th width="80">
                                         <input type="checkbox" class="grp"/>
                                     </th>
-                                    <th width="180" data-sort="id,d">ID</th>
-                                    <th width="180">展示</th>
-                                    <th width="200" data-sort="filename,a">文件名</th>
-                                    <th width="200" data-sort="size,a">文件大小</th>
+                                    <th width="100" data-sort="id,d">ID</th>
+                                    <th width="100">展示</th>
+                                    <th width="180" data-sort="filename,a">文件名</th>
+                                    <th width="180" data-sort="size,a">文件大小</th>
 
                                 </tr>
                                 </thead>

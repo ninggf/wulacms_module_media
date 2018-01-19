@@ -19,9 +19,7 @@
         <td>{$row.filename}</td>
         <td>{$row.size/1000}k</td>
 
-        <td class="text-right">
 
-        </td>
     </tr>
     {foreachelse}
     <tr>
