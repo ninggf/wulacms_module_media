@@ -46,7 +46,7 @@
                             <div class="col-sm-6 m-b-xs">
                                 <a class="btn btn-sm btn-success edit-admin"
                                     data-title="新的管理员" id="upload">
-                                    <i class="layui-icon" style="font-size: 12px; color: #1E9FFF;">&#xe681;</i> 上传
+                                    <i class="layui-icon" style="font-size: 12px; ">&#xe681;</i> 上传
                                 </a>
                                 <div class="btn-group">
                                     <a href="{'media/del'|app}" data-ajax data-grp="#core-admin-table tbody input.grp:checked"
@@ -66,7 +66,7 @@
                                 </form>
                             </div>
                             <div class="col-sm-1 m-b-xs text-right">
-                            <a id="tog" href="#aside" data-toggle="class:show" class="btn btn-sm btn-success edit-admin"><i class="fa fa-mail-forward (alias)" ></i></a>
+                            <a id="tog" href="#aside" data-toggle="class:show" class="btn btn-sm btn-icon btn-info"><i class="fa fa-arrow-circle-right" ></i></a>
                             </div>
                         </div>
                     </header>
@@ -159,13 +159,13 @@
 			  $('#height').text(height + 'px');
 		  }
         }).on('click','#tog',function () {
-            var left = $('#tog').find('i').hasClass('fa fa-mail-forward (alias)');
+            var left = $('#tog').find('i').hasClass('fa fa-arrow-circle-left');
             if(left){
-                $('#tog').find('i').removeClass('fa fa-mail-forward (alias)');
-                $('#tog').find('i').addClass('fa fa-mail-reply (alias)');
+                $('#tog').find('i').removeClass('fa fa-arrow-circle-left');
+                $('#tog').find('i').addClass('fa fa-arrow-circle-right');
             }else {
-                $('#tog').find('i').removeClass('fa fa-mail-reply (alias)');
-                $('#tog').find('i').addClass('fa fa-mail-forward (alias)');
+                $('#tog').find('i').removeClass('fa fa-arrow-circle-right');
+                $('#tog').find('i').addClass('fa fa-arrow-circle-left');
             }
 	});
 	var upload = layui.upload;
