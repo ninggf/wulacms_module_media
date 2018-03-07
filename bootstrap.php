@@ -2,6 +2,8 @@
 
 namespace media;
 
+use media\classes\form\MediaSettingForm;
+use media\classes\MediaSetting;
 use wula\cms\CmfModule;
 use wulaphp\app\App;
 use backend\classes\DashboardUI;
@@ -60,6 +62,17 @@ class Media1Module extends CmfModule {
 	public static function initAcl($manager) {
 		$acl = $manager->getResource('media', '媒体库', 'm');
 		$acl->addOperate('index', '媒体');
+	}
+
+	/**
+	 * @param $settings
+	 *
+	 * @return mixed
+	 * @filter backend/settings
+	 */
+	public static function  setting($settings){
+		$settings['media'] = new MediaSetting();
+		return $settings;
 	}
 
 }

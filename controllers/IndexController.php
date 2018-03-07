@@ -5,6 +5,7 @@ namespace media\controllers;
 use backend\classes\IFramePageController;
 use backend\form\Plupload;
 use media\classes\model\Media;
+use wulaphp\app\App;
 use wulaphp\io\Ajax;
 use wulaphp\mvc\controller\Controller;
 use wulaphp\mvc\view\JsonView;
@@ -28,7 +29,13 @@ class IndexController extends IFramePageController {
 	}
 
 	public function add() {
-		$rst = $this->upload(null, 512000);
+		//上传目录
+		$save_path = App::cfg('save_path@media');
+		if (!$save_path) {
+			$save_path = null;
+		}
+		$max_upload = App::cfg('max_upload@media',20);
+		$rst = $this->upload($save_path, $max_upload*1024*1000);
 		if (isset($rst['error']) && $rst['error']['code'] == 422) {
 			return new JsonView($rst, [], 422);
 		}
@@ -109,4 +116,9 @@ class IndexController extends IFramePageController {
 
 		return Ajax::error('未指定文件');
 	}
+
+	public function allowed($ext) {
+		return App::cfg('upload_type@media', 'jpg,gif,png,bmp,jpeg,zip,rar,7z,tar,gz,bz2,doc,docx,txt,ppt,pptx,xls,xlsx,pdf,mp3,avi,mp4,flv,swf,apk');
+	}
+
 }
