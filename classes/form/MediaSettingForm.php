@@ -14,6 +14,15 @@ class MediaSettingForm extends FormTable {
 
 	use JQueryValidator;
 	public $table = null;
+
+	/**
+	 * 媒体域名
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @note  多媒体显示域名
+	 */
+	public $media_domain;
+
 	/**
 	 * 存储路径
 	 * @var \backend\form\TextField
