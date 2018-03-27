@@ -7,12 +7,12 @@ use backend\form\Plupload;
 use media\classes\model\Media;
 use wulaphp\app\App;
 use wulaphp\io\Ajax;
-use wulaphp\mvc\controller\Controller;
 use wulaphp\mvc\view\JsonView;
 use wulaphp\validator\JQueryValidator;
 
 /**
  * 默认控制器.
+ * @acl m:media
  */
 class IndexController extends IFramePageController {
 	use JQueryValidator, Plupload;
@@ -21,11 +21,7 @@ class IndexController extends IFramePageController {
 	 * 默认控制方法.
 	 */
 	public function index() {
-		$data = ['module' => 'Index'];
-
-		// 你的代码写在这里
-
-		return $this->render($data);
+		return $this->render();
 	}
 
 	public function add() {
@@ -34,8 +30,8 @@ class IndexController extends IFramePageController {
 		if (!$save_path) {
 			$save_path = null;
 		}
-		$max_upload = App::cfg('max_upload@media',20);
-		$rst = $this->upload($save_path, $max_upload*1024*1000);
+		$max_upload = App::icfgn('max_upload@media', 20);
+		$rst        = $this->upload($save_path, $max_upload * 1024 * 1000);
 		if (isset($rst['error']) && $rst['error']['code'] == 422) {
 			return new JsonView($rst, [], 422);
 		}
@@ -44,14 +40,14 @@ class IndexController extends IFramePageController {
 			$name = $rst['result']['name'];
 			$uid  = $this->passport->uid;
 			if ($url && !preg_match('#^(/|https?://).+#', $url)) {
-				if (preg_match('/(.gif|.png|.jpg|.jpeg)/', $name)) {
+				if (preg_match('/\.(gif|png|jpg|jpeg)$/i', $name)) {
 					$data['type'] = 'image';
-				}
-				if (preg_match('/(.mp3|.WAV)/', $name)) {
+				} else if (preg_match('/\.(mp3|WAV)$/i', $name)) {
 					$data['type'] = 'mp3';
-				}
-				if (preg_match('/(.mp4|.avi)/', $name)) {
+				} else if (preg_match('/\.(mp4|avi)$/i', $name)) {
 					$data['type'] = 'video';
+				} else {
+					$data['type'] = 'file';
 				}
 				$data['uid']      = $uid;
 				$data['filename'] = $name;
@@ -73,12 +69,11 @@ class IndexController extends IFramePageController {
 	}
 
 	//媒体表格数据
-	public function data($type = '', $q = '', $count = '', $pager, $sort) {
+	public function data($type = '', $q = '', $count = '') {
 
-		$page      = $pager['page'];
-		$page_size = $pager['size'];
-		$model     = new Media();
-		$where     = ['id >=' => 1];
+
+		$model = new Media();
+		$where = ['id >=' => 1];
 		if ($type) {
 			$where['type'] = $type;
 		}
@@ -87,7 +82,7 @@ class IndexController extends IFramePageController {
 			$where[]                 = $where1;
 		}
 		$where['deleted'] = 0;
-		$query            = $model->select('*')->where($where)->limit(($page - 1) * $page_size, $page_size)->sort($sort['name'], $sort['dir']);
+		$query            = $model->select('*')->where($where)->page()->sort();
 		$rows             = $query->toArray();
 		$total            = '';
 		if ($count) {
@@ -118,7 +113,9 @@ class IndexController extends IFramePageController {
 	}
 
 	public function allowed($ext) {
-		return App::cfg('upload_type@media', 'jpg,gif,png,bmp,jpeg,zip,rar,7z,tar,gz,bz2,doc,docx,txt,ppt,pptx,xls,xlsx,pdf,mp3,avi,mp4,flv,swf,apk');
-	}
+		$allowed = App::cfg('upload_type@media', 'jpg,gif,png,bmp,jpeg,zip,rar,7z,tar,gz,bz2,doc,docx,txt,ppt,pptx,xls,xlsx,pdf,mp3,avi,mp4,flv,swf,apk');
+		$allowed = explode(',', $allowed);
 
+		return in_array(ltrim($ext, '.'), $allowed);
+	}
 }

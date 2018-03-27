@@ -2,11 +2,10 @@
 
 namespace media;
 
-use media\classes\form\MediaSettingForm;
+use backend\classes\DashboardUI;
 use media\classes\MediaSetting;
 use wula\cms\CmfModule;
 use wulaphp\app\App;
-use backend\classes\DashboardUI;
 
 /**
  * 系统内核模块.
@@ -43,14 +42,12 @@ class Media1Module extends CmfModule {
 	 */
 	public static function initUI(DashboardUI $ui) {
 		$passport = whoami('admin');
-		if ($passport->cando('m:media')) {
-			$menu       = $ui->getMenu('media', '媒体库');
-			$menu->icon = '&#xe60b;';
-			if ($passport->cando('m:media')) {
-				$list              = $menu->getMenu('index', '媒体');
-				$list->icon        = '&#xe60b;';
-				$list->data['url'] = App::url('media/index');
-			}
+		if ($passport->cando('m:site') && $passport->cando('m:media')) {
+			$site              = $ui->getMenu('site', '我的网站', 1);
+			$site->icon        = '&#xe617;';
+			$menu              = $site->getMenu('media', '媒体库', 3);
+			$menu->icon        = '&#xe60b;';
+			$menu->data['url'] = App::url('media');
 		}
 	}
 
@@ -60,8 +57,7 @@ class Media1Module extends CmfModule {
 	 * @bind rbac\initAdminManager
 	 */
 	public static function initAcl($manager) {
-		$acl = $manager->getResource('media', '媒体库', 'm');
-		$acl->addOperate('index', '媒体');
+		$manager->getResource('media', '媒体库', 'm');
 	}
 
 	/**
@@ -70,8 +66,9 @@ class Media1Module extends CmfModule {
 	 * @return mixed
 	 * @filter backend/settings
 	 */
-	public static function  setting($settings){
+	public static function setting($settings) {
 		$settings['media'] = new MediaSetting();
+
 		return $settings;
 	}
 
