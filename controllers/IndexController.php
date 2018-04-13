@@ -26,12 +26,8 @@ class IndexController extends IFramePageController {
 
 	public function add() {
 		//上传目录
-		$save_path = App::cfg('save_path@media');
-		if (!$save_path) {
-			$save_path = null;
-		}
 		$max_upload = App::icfgn('max_upload@media', 20);
-		$rst        = $this->upload($save_path, $max_upload * 1024 * 1000);
+		$rst        = $this->upload(null, $max_upload * 1024 * 1000);
 		if (isset($rst['error']) && $rst['error']['code'] == 422) {
 			return new JsonView($rst, [], 422);
 		}
