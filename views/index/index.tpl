@@ -1,5 +1,5 @@
 <section class="hbox stretch wulaui" id="core-account-workset">
-    <aside class="aside aside-md b-r">
+    <aside class="aside aside-sm b-r">
         <section class="vbox">
             <header class="header bg-light b-b">
                 <button class="btn btn-icon btn-default btn-sm pull-right visible-xs m-r-xs" data-toggle="class:show"
