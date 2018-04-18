@@ -45,7 +45,7 @@ class Media1Module extends CmfModule {
 		if ($passport->cando('m:site') && $passport->cando('m:media')) {
 			$site              = $ui->getMenu('site', '我的网站', 1);
 			$site->icon        = '&#xe617;';
-			$menu              = $site->getMenu('media', '媒体库', 3);
+			$menu              = $site->getMenu('media', '附件管理', 3);
 			$menu->icon        = '&#xe60b;';
 			$menu->data['url'] = App::url('media');
 		}
