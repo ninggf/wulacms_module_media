@@ -8,36 +8,34 @@
                 </button>
                 <p class="h4">媒体库</p>
             </header>
-            <section class="hidden-xs scrollable w-f m-t-xs" id="core-role-wrap">
-                <div id="core-role-list" data-loading="#core-role-list">
+            <section class="hidden-xs scrollable w-f m-t-xs">
+                <div id="core-role-list">
                     <div class="wulaui">
-
-                        <ul class="nav nav-pills nav-stacked no-radius" data-pop-menu="#core-role-pop-menu">
+                        <ul class="nav nav-pills nav-stacked no-radius">
                             <li class="active" data-type="">
-                                <a href="javascript:void(0);" class="role-li">全部</a>
+                                <a href="javascript:" class="role-li">全部</a>
                             </li>
                             <li class="" data-type="image">
-                                <a href="javascript:void(0);" class="role-li">图片</a>
+                                <a href="javascript:" class="role-li">图片</a>
                             </li>
                             <li class="" data-type="video">
-                                <a href="javascript:void(0);" class="role-li">视频</a>
+                                <a href="javascript:" class="role-li">视频</a>
                             </li>
                             <li class="" data-type="mp3">
-                                <a href="javascript:void(0);" class="role-li">音频</a>
+                                <a href="javascript:" class="role-li">音频</a>
+                            </li>
+                            <li class="" data-type="file">
+                                <a href="javascript:" class="role-li">文件</a>
                             </li>
                         </ul>
-
                     </div>
                 </div>
             </section>
-
         </section>
     </aside>
 
     <section>
-
         <section class="hbox stretch">
-
             <aside class="aside b-r" id="admin-grid">
                 <section class="vbox wulaui" id="core-users-workset">
                     <header class="bg-light header b-b clearfix">
@@ -77,14 +75,14 @@
                                    style="min-width: 800px">
                                 <thead>
                                 <tr>
-                                    <th width="80">
+                                    <th width="30">
                                         <input type="checkbox" class="grp"/>
                                     </th>
-                                    <th width="100" data-sort="id,d">ID</th>
-                                    <th width="100">展示</th>
+                                    <th width="80" data-sort="id,d">ID</th>
+                                    <th width="80" data-sort="type,a">类型</th>
                                     <th width="180" data-sort="filename,a">文件名</th>
-                                    <th width="180" data-sort="size,a">文件大小</th>
-
+                                    <th width="150" data-sort="size,a">文件大小</th>
+                                    <th>上传时间</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -98,46 +96,41 @@
             <aside class="aside hidden" id="acl-space"></aside>
         </section>
     </section>
-    <aside class="aside-lg bg-white  hide" id="aside">
-        <section class="vbox stretch">
-            <div class="layui-fluid" id="flu" style="display: none;">
-                <div class="layui-col-md12">
-                    <img src="" id="preview">
-                </div>
-
-                <section class="panel panel-default" style="padding-top: 20px;">
-                    <h4 class="font-thin padder">About This</h4>
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <p>Size </p>
-                            <small class="block text-muted"><i class="fa fa-folder"></i> <i id="size"></i></small>
-                        </li>
-                        <li class="list-group-item">
-                            <p>Width</p>
-                            <small class="block text-muted"><i class="fa  fa-text-width"></i> <i id="width"></i></small>
-                        </li>
-                        <li class="list-group-item">
-                            <p> Height </p>
-                            <small class="block text-muted"><i class="fa  fa-text-height"></i> <i id="height"></i>
-                            </small>
-                        </li>
-                        <li class="list-group-item">
-                            <p> Preview </p>
-                            <small class="block text-muted"><i class="fa  fa-eye"></i> <a href="" id="pre"
-                                                                                          target="_blank">click me!</a>
-                            </small>
-                        </li>
-                    </ul>
-                </section>
-
-            </div>
-
-        </section>
+    <aside class="aside-lg bg-white hidden" id="aside">
+        <div class="layui-fluid p-t-md" id="flu">
+            <section class="panel panel-default p-t-md">
+                <h4 class="font-thin padder">文件信息</h4>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <p>大小 </p>
+                        <small class="block text-muted">
+                            <i class="fa fa-folder"></i> <i id="size"></i>
+                        </small>
+                    </li>
+                    <li class="list-group-item">
+                        <p>尺寸</p>
+                        <small class="block text-muted">
+                            <i id="width"></i>
+                        </small>
+                    </li>
+                    <li class="list-group-item">
+                        <p>预览</p>
+                        <a href="" id="pre" target="_blank">
+                            <img src="{'s.gif'|assets}" id="preview" style="max-width: 188px;height: auto;"/>
+                        </a>
+                        <small class="block text-muted m-t-sm">
+                            <i class="fa fa-eye"></i>
+                            <a href="javascript:" id="prex" target="_blank">复制链接</a>
+                        </small>
+                    </li>
+                </ul>
+            </section>
+        </div>
     </aside>
 </section>
 
 <script>
-	layui.use(['jquery', 'layer', 'upload', 'wulaui'], ($, layer) => {
+	layui.use(['jquery', 'layer', 'upload', 'wulaui', 'clipboard'], ($, l, up, wui, cp) => {
 		//菜单处理
 		$('#core-account-workset').on('click', 'a.role-li', function () { //分角色查看用户
 			var me = $(this), mp = me.closest('li'), type = mp.data('type'), group = me.closest('ul');
@@ -150,17 +143,21 @@
 			$('[data-table-form="#core-admin-table"]').submit();
 			return false;
 		}).on('click', 'tr', function () {
+			var type     = $(this).data('type');
 			var url_path = $(this).data('url');
 			var size     = $(this).data('size');
 			var width    = $(this).data('width');
 			var height   = $(this).data('height');
 			if (url_path) {
-				$('#flu').show();
-				$('#preview').attr('src', '/' + url_path);
-				$('#pre').attr('href', '/' + url_path);
+				if (type === 'image') {
+					$('#pre').show();
+					$('#preview').attr('src', url_path);
+				} else {
+					$('#pre').hide();
+				}
+				$('#pre').attr('href', url_path);
 				$('#size').text(size / 1000 + 'k');
-				$('#width').text(width + 'px');
-				$('#height').text(height + 'px');
+				$('#width').text(width + 'px X ' + height + 'px');
 			}
 		}).on('click', '#tog', function () {
 			var left = $('#tog').find('i').hasClass('fa fa-arrow-circle-left');
@@ -171,14 +168,23 @@
 				$('#tog').find('i').removeClass('fa fa-arrow-circle-right');
 				$('#tog').find('i').addClass('fa fa-arrow-circle-left');
 			}
+		}).on('click', '#prex', function () {
+			var code = $('#pre').attr('href');
+			cp.copy({
+				"text/plain": code
+			}).then(function () {
+				wui.toast.success('URL已复制');
+			}, function () {
+				wui.toast.error('URL无法复制,请手工复制吧');
+			});
 		});
 		var upload = layui.upload;
 
 		//执行实例
 		upload.render({
 			elem      : '#upload' //绑定元素
-			, url     : '/media/add' //上传接口
-			accept    : 'file'
+			, url     : wui.app('media/add') //上传接口
+			, accept  : 'file'
 			, multiple: true
 		});
 	})

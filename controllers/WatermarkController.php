@@ -12,25 +12,30 @@ namespace media\controllers;
 
 use backend\classes\BackendController;
 use backend\form\Plupload;
-use media\classes\model\Media;
-use wulaphp\app\App;
+use wulaphp\io\LocaleUploader;
 
 /**
- * Class UploadController
+ * 上传水印图片
  * @package media\controllers
  * @acl     m:media
  */
-class UploadController extends BackendController {
+class WatermarkController extends BackendController {
 	use Plupload;
 
 	public function index() {
-		$maxSize = App::icfgn('max_upload@media', 20) * 1024 * 1000;
-		$rst     = $this->upload(null, $maxSize);
-		if ($rst['done']) {
-			$media_model = new Media();
-			$media_model->newFile($rst, $this->passport->uid);
-		}
+		$maxSize = 100000;
+		$rst     = $this->upload('~watermark', $maxSize, true, new LocaleUploader(null, 'water'));
 
 		return $rst;
+	}
+
+	public function allowed($ext) {
+		$allowed = ['png'];
+
+		return in_array(ltrim($ext, '.'), $allowed);
+	}
+
+	protected function watermark() {
+		return null;
 	}
 }

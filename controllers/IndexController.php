@@ -32,42 +32,17 @@ class IndexController extends IFramePageController {
 			return new JsonView($rst, [], 422);
 		}
 		if ($rst['done']) {
-			$url  = $rst['result']['url'];
-			$name = $rst['result']['name'];
-			$uid  = $this->passport->uid;
-			if ($url && !preg_match('#^(/|https?://).+#', $url)) {
-				if (preg_match('/\.(gif|png|jpg|jpeg)$/i', $name)) {
-					$data['type'] = 'image';
-				} else if (preg_match('/\.(mp3|WAV)$/i', $name)) {
-					$data['type'] = 'mp3';
-				} else if (preg_match('/\.(mp4|avi)$/i', $name)) {
-					$data['type'] = 'video';
-				} else {
-					$data['type'] = 'file';
-				}
-				$data['uid']      = $uid;
-				$data['filename'] = $name;
-				$data['url']      = $url;
-				$data['filepath'] = $rst['result']['path'];
-				$data['size']     = $rst['result']['size'];
-				$data['width']    = $rst['result']['width'];
-				$data['height']   = $rst['result']['height'];
-				$media_model      = new Media();
-				$re               = $media_model->create($data);
-				if ($re) {
-					return Ajax::reload('#core-admin-table', '文件上传成功');
-				}
+			$media_model = new Media();
+			$media_model->newFile($rst, $this->passport->uid);
 
-			}
+			return Ajax::reload('#core-admin-table', '文件上传成功');
 		}
 
-		return $rst;
+		return new JsonView($rst, [], 422);
 	}
 
 	//媒体表格数据
 	public function data($type = '', $q = '', $count = '') {
-
-
 		$model = new Media();
 		$where = ['id >=' => 1];
 		if ($type) {
@@ -106,12 +81,5 @@ class IndexController extends IFramePageController {
 		}
 
 		return Ajax::error('未指定文件');
-	}
-
-	public function allowed($ext) {
-		$allowed = App::cfg('upload_type@media', 'jpg,gif,png,bmp,jpeg,zip,rar,7z,tar,gz,bz2,doc,docx,txt,ppt,pptx,xls,xlsx,pdf,mp3,avi,mp4,flv,swf,apk');
-		$allowed = explode(',', $allowed);
-
-		return in_array(ltrim($ext, '.'), $allowed);
 	}
 }

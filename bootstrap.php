@@ -3,9 +3,11 @@
 namespace media;
 
 use backend\classes\DashboardUI;
+use backend\form\Plupload;
 use media\classes\MediaSetting;
 use wula\cms\CmfModule;
 use wulaphp\app\App;
+use wulaphp\io\LocaleUploader;
 
 /**
  * 系统内核模块.
@@ -72,6 +74,47 @@ class Media1Module extends CmfModule {
 		return $settings;
 	}
 
+	/**
+	 * @param \wulaphp\io\IUploader $uploader
+	 *
+	 * @filter plupload\getUploader
+	 * @return \wulaphp\io\IUploader
+	 */
+	public static function cuploader($uploader) {
+		if ($uploader instanceof LocaleUploader) {
+			$dup = App::cfg('default_uploader@media', 'file');
+			if ($dup && $dup != 'file') {
+				$ups = Plupload::uploaders();
+				if (isset($ups[ $dup ])) {
+					$uploader = $ups[ $dup ];
+				}
+			}
+		}
+
+		return $uploader;
+	}
+
+	/**
+	 * @param array $ds
+	 *
+	 * @filter get_media_domains
+	 * @return array
+	 */
+	public static function get_media_domains($ds) {
+		$dds = trim(App::cfg('media_domain@media'));
+		if ($dds) {
+			$ds  = [];
+			$dds = explode("\n", $dds);
+			foreach ($dds as $d) {
+				$d = trim($d);
+				if ($d) {
+					$ds[] = $d;
+				}
+			}
+		}
+
+		return $ds;
+	}
 }
 
 App::register(new Media1Module());

@@ -12,6 +12,7 @@ namespace media\controllers;
 
 use backend\classes\IFramePageController;
 use backend\form\Plupload;
+use media\classes\model\Media;
 use wulaphp\app\App;
 
 /**
@@ -27,6 +28,10 @@ class InsController extends IFramePageController {
 		$rst        = $this->upload(null, $max_upload * 1024 * 1000);
 		if (isset($rst['error'])) {
 			return ['done' => 0];
+		}
+		if ($rst['done']) {
+			$media_model = new Media();
+			$media_model->newFile($rst, $this->passport->uid);
 		}
 
 		return $rst;
