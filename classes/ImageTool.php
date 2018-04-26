@@ -65,28 +65,35 @@ class ImageTool {
 				if (is_array($s) && isset ($s [0]) && isset ($s [1])) {
 					$width  = intval($s [0]);
 					$height = intval($s [1]);
-					if (isset($s[2])) {
-						$file  = $s[2];
-						$tfile = get_thumbnail_filename($this->file, $file, 0, $sep);
+					if (!$sep) {
+						$tfile = $this->file;
 					} else {
-						$tfile = get_thumbnail_filename($this->file, $width, $height, $sep);
-					}
-					if ($replace) {
-						$tfile = str_replace($replace, '', $tfile);
-					}
-					if (is_file($tfile)) {
-						$files [ $i ] = $tfile;
-						continue;
+						if (isset($s[2])) {
+							$file  = $s[2];
+							$tfile = get_thumbnail_filename($this->file, $file, 0, $sep);
+						} else {
+							$tfile = get_thumbnail_filename($this->file, $width, $height, $sep);
+						}
+						if ($replace) {
+							$tfile = str_replace($replace, '', $tfile);
+						}
+						if (is_file($tfile)) {
+							$files [ $i ] = $tfile;
+							continue;
+						}
 					}
 					$image = new \image ($this->file);
 					$image->attach(new \image_fx_resize ($width, $height));
 					$rst = $image->save($tfile);
 					if (!$rst) {
-						log_error('生成缩略图失败:' . $tfile);
+						log_warn('生成缩略图失败:' . $tfile, 'image_tool');
 					} else {
 						$files [ $i ] = $tfile;
 					}
 					$image->destroyImage();
+					if (!$sep) {
+						break;
+					}
 				}
 			}
 		}
@@ -251,10 +258,10 @@ class ImageTool {
 	 */
 	public static function download($imgUrls, $uploader, $timeout = 30, $watermark = [], $resize = [], $referer = '') {
 		// 忽略抓取时间限制
-		set_time_limit(0);
+		set_time_limit(300);
 		$tmpNames = [];
-		$savePath = TMP_PATH . 'img' . DS;
-		if (!file_exists($savePath) && !mkdir($savePath, 0777, true)) {
+		$savePath = TMP_PATH . 'rimgs' . DS;
+		if (!file_exists($savePath) && !mkdir($savePath, 0755, true)) {
 			return [];
 		}
 		if (is_string($imgUrls)) {
@@ -298,12 +305,23 @@ class ImageTool {
 
 class ImageDownloadCallback implements CurlMultiExeCallback {
 	private $savePath;
+	/**
+	 * @var \wulaphp\io\IUploader
+	 */
 	private $uploader;
 	private $watermark;
 	private $config;
 	private $resize;
 	public  $mosaics = [];
 
+	/**
+	 * ImageDownloadCallback constructor.
+	 *
+	 * @param string                $savedPath
+	 * @param \wulaphp\io\IUploader $uploader
+	 * @param array                 $watermark
+	 * @param array                 $resize
+	 */
 	public function __construct($savedPath, $uploader, $watermark, $resize) {
 		$this->savePath  = $savedPath;
 		$this->uploader  = $uploader;
@@ -311,7 +329,7 @@ class ImageDownloadCallback implements CurlMultiExeCallback {
 		$this->resize    = $resize;
 		$this->config    = [
 			"fileType" => [".gif", ".png", ".jpg", ".jpeg", ".bmp"],
-			"fileSize" => 50000
+			"fileSize" => 5000
 		]; // 文件大小限制，单位KB
 	}
 
@@ -336,42 +354,46 @@ class ImageDownloadCallback implements CurlMultiExeCallback {
 		$oriPath  = explode("/", $imgUrl);
 		$fileType = strtolower(strrchr($oriPath [ count($oriPath) - 1 ], '.'));
 		if (empty ($fileType)) {
-			$fileType = '.' . ImageUtil::$MIMES [ $contentType ];
+			$fileType = '.' . ImageTool::$MIMES [ $contentType ];
 		}
 		if (!in_array($fileType, $this->config ['fileType'])) {
 			return null;
 		}
-		// 生成随机文件名.
-		$tmpName = $this->savePath . unique_filename($this->savePath, rand_str(6, 'a-z') . $fileType);
+		//生成文件名，相同文件不重复下载
+		$tmpName = $this->savePath . md5($imgUrl) . $fileType;
 		$size    = @file_put_contents($tmpName, $data);
+		if ($size > $maxSize) {
+			@unlink($tmpName);
+
+			return null;
+		}
 		if ($size !== false && $size > 0) {
 			if (isset ($this->mosaics [ $imgUrl ]) && $this->mosaics [ $imgUrl ]) {
 				list ($pos, $size) = $this->mosaics [ $imgUrl ];
-				$img = new ImageUtil ($tmpName);
+				$img = new ImageTool ($tmpName);
 				$img->mosaic($pos, $size);
 			}
 			if ($this->resize) {
-				$img = new ImageUtil ($tmpName);
+				$img = new ImageTool ($tmpName);
 				$cnt = count($this->resize);
 				if ($cnt == 2) {
-					$img->thumbnail([$this->resize]);
+					$img->thumbnail([$this->resize], null);
 				} else if ($cnt == 4) {
 					$img->crop($this->resize [0], $this->resize [1], $this->resize [2], $this->resize [3]);
 				}
 			}
 			if ($this->watermark) {
 				list ($wimg, $pos, $size) = $this->watermark;
-				$img = new ImageUtil ($tmpName);
+				$img = new ImageTool ($tmpName);
 				$img->watermark($wimg, $pos, $size);
 			}
 			$rst = $this->uploader->save($tmpName);
 			if ($rst) {
-				FileUploader::save2db($rst, $fileType);
-				$rst [] = $fileType;
+				$rst ['type'] = $fileType;
 
 				return $rst;
 			} else {
-				log_error($this->uploader->get_last_error(), 'remote_down_pic');
+				log_info($this->uploader->get_last_error(), 'remote_down_pic');
 			}
 		}
 

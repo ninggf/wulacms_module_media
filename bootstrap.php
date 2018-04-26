@@ -80,8 +80,8 @@ class Media1Module extends CmfModule {
 	 * @filter plupload\getUploader
 	 * @return \wulaphp\io\IUploader
 	 */
-	public static function cuploader($uploader) {
-		if ($uploader instanceof LocaleUploader) {
+	public static function cuploader($uploader = null) {
+		if (!$uploader || $uploader instanceof LocaleUploader) {
 			$dup = App::cfg('default_uploader@media', 'file');
 			if ($dup && $dup != 'file') {
 				$ups = Plupload::uploaders();
