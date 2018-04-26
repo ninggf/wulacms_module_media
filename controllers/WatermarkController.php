@@ -35,6 +35,10 @@ class WatermarkController extends BackendController {
 		return in_array(ltrim($ext, '.'), $allowed);
 	}
 
+	/**
+	 * 不添加水印
+	 * @return null
+	 */
 	protected function watermark() {
 		return null;
 	}

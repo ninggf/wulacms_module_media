@@ -7,7 +7,6 @@ use backend\form\Plupload;
 use media\classes\model\Media;
 use wulaphp\app\App;
 use wulaphp\io\Ajax;
-use wulaphp\mvc\view\JsonView;
 use wulaphp\validator\JQueryValidator;
 
 /**
@@ -28,9 +27,7 @@ class IndexController extends IFramePageController {
 		//上传目录
 		$max_upload = App::icfgn('max_upload@media', 20);
 		$rst        = $this->upload(null, $max_upload * 1024 * 1000);
-		if (isset($rst['error']) && $rst['error']['code'] == 422) {
-			return new JsonView($rst, [], 422);
-		}
+
 		if ($rst['done']) {
 			$media_model = new Media();
 			$media_model->newFile($rst, $this->passport->uid);
@@ -38,7 +35,7 @@ class IndexController extends IFramePageController {
 			return Ajax::reload('#core-admin-table', '文件上传成功');
 		}
 
-		return new JsonView($rst, [], 422);
+		return Ajax::error($rst['error']['message']);
 	}
 
 	//媒体表格数据

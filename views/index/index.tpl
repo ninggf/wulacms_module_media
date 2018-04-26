@@ -57,32 +57,40 @@
                                     <div class="input-group input-group-sm">
                                         <input type="text" name="q" class="input-sm form-control"
                                                placeholder="{'Search'|t}"/>
-                                        <span class="input-group-btn">
-                            <button class="btn btn-sm btn-info" id="btn-do-search" type="submit">Go!</button>
-                        </span>
+                                        <p class="input-group-btn">
+                                            <button class="btn btn-sm btn-info" id="btn-do-search" type="submit">Go!
+                                            </button>
+                                        </p>
                                     </div>
                                 </form>
                             </div>
                             <div class="col-sm-1 m-b-xs text-right">
-                                <a id="tog" href="#aside" data-toggle="class:show" class="btn btn-sm btn-success"><i
-                                            class="fa fa-arrow-circle-right"></i></a>
+                                <a href="#aside" data-toggle="class:hidden" class="btn btn-sm btn-default active">
+                                    <span class="text">
+                                        <i class="fa fa-angle-double-left"></i>
+                                    </span>
+                                    <span class="text-active">
+                                        <i class="fa fa-angle-double-right"></i>
+                                    </span>
+                                </a>
                             </div>
                         </div>
                     </header>
                     <section class="w-f bg-white">
                         <div class="table-responsive">
                             <table id="core-admin-table" data-auto data-table="{'media/data'|app}" data-sort="id,d"
-                                   style="min-width: 800px">
+                                   style="min-width: 600px">
                                 <thead>
                                 <tr>
                                     <th width="30">
                                         <input type="checkbox" class="grp"/>
                                     </th>
                                     <th width="80" data-sort="id,d">ID</th>
-                                    <th width="80" data-sort="type,a">类型</th>
-                                    <th width="180" data-sort="filename,a">文件名</th>
-                                    <th width="150" data-sort="size,a">文件大小</th>
-                                    <th>上传时间</th>
+                                    <th width="60" data-sort="type,a">类型</th>
+                                    <th data-sort="filename,a">文件名</th>
+                                    <th width="120" data-sort="size,a">文件大小</th>
+                                    <th width="150">上传时间</th>
+                                    <th width="30"></th>
                                 </tr>
                                 </thead>
                             </table>
@@ -96,11 +104,17 @@
             <aside class="aside hidden" id="acl-space"></aside>
         </section>
     </section>
-    <aside class="aside-lg bg-white hidden" id="aside">
+    <aside class="aside-lg bg-white" id="aside">
         <div class="layui-fluid p-t-md" id="flu">
             <section class="panel panel-default p-t-md">
                 <h4 class="font-thin padder">文件信息</h4>
                 <ul class="list-group">
+                    <li class="list-group-item">
+                        <p>文件名 </p>
+                        <small class="block text-muted">
+                            <i class="fa fa-folder"></i> <i id="name"></i>
+                        </small>
+                    </li>
                     <li class="list-group-item">
                         <p>大小 </p>
                         <small class="block text-muted">
@@ -142,12 +156,16 @@
 			$('#admin-role-id').val(type ? type : '');
 			$('[data-table-form="#core-admin-table"]').submit();
 			return false;
-		}).on('click', 'tr', function () {
-			var type     = $(this).data('type');
-			var url_path = $(this).data('url');
-			var size     = $(this).data('size');
-			var width    = $(this).data('width');
-			var height   = $(this).data('height');
+		}).on('click', 'td i,tr', function () {
+			if ($('#aside').hasClass('hidden')) {
+				return;
+			}
+			var tr       = $(this).closest('tr'),
+				type     = tr.data('type'),
+				url_path = tr.data('url'),
+				size     = tr.data('size'),
+				width    = tr.data('width'),
+				height   = tr.data('height');
 			if (url_path) {
 				if (type === 'image') {
 					$('#pre').show();
@@ -155,33 +173,23 @@
 				} else {
 					$('#pre').hide();
 				}
-				$('#pre').attr('href', url_path);
+				$('#pre').attr('href', url_path).attr('title', url_path);
+				$('#name').text(tr.find('.name').text());
 				$('#size').text(size / 1000 + 'k');
 				$('#width').text(width + 'px X ' + height + 'px');
-			}
-		}).on('click', '#tog', function () {
-			var left = $('#tog').find('i').hasClass('fa fa-arrow-circle-left');
-			if (left) {
-				$('#tog').find('i').removeClass('fa fa-arrow-circle-left');
-				$('#tog').find('i').addClass('fa fa-arrow-circle-right');
-			} else {
-				$('#tog').find('i').removeClass('fa fa-arrow-circle-right');
-				$('#tog').find('i').addClass('fa fa-arrow-circle-left');
 			}
 		}).on('click', '#prex', function () {
 			var code = $('#pre').attr('href');
 			cp.copy({
 				"text/plain": code
 			}).then(function () {
-				wui.toast.success('URL已复制');
+				wui.toast.success('链接已复制');
 			}, function () {
-				wui.toast.error('URL无法复制,请手工复制吧');
+				wui.toast.error('无法复制链接,请手工复制吧');
 			});
 		});
-		var upload = layui.upload;
-
 		//执行实例
-		upload.render({
+		layui.upload.render({
 			elem      : '#upload' //绑定元素
 			, url     : wui.app('media/add') //上传接口
 			, accept  : 'file'

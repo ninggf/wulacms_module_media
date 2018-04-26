@@ -137,7 +137,7 @@ class MediaSettingForm extends FormTable {
 	 * 文件上传器配置
 	 * @var \backend\form\TextField
 	 * @type string
-	 * @layout 8,col-xs-9
+	 * @layout 9,col-xs-12
 	 * @note   上传器参数配置，请参数具体上传器说明.
 	 */
 	public $params;

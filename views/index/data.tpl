@@ -17,13 +17,16 @@
                 <i class="fa fa-file"></i>
             {/if}
         </td>
-        <td>{$row.filename}</td>
+        <td class="name">{$row.filename}</td>
         <td>{$row.size/1000}k</td>
         <td>{$row.create_time|date_format:'Y-m-d H:i:s'}</td>
+        <td>
+            <i class="fa fa-eye"></i>
+        </td>
     </tr>
     {foreachelse}
     <tr>
-        <td colspan="6" class="text-center">暂无数据</td>
+        <td colspan="7" class="text-center">暂无数据</td>
     </tr>
 {/foreach}
 </tbody>
