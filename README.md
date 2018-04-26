@@ -81,7 +81,7 @@ class MyUploader implements IUploader {
 
 ```php
 bind('media\regUploaders',function( $ups ){ 
-    $ups['my']='我的文件上传器';
+    $ups['my']= new MyUploader();
     return $ups; 
 });
 ```
