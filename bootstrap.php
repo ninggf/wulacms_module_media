@@ -48,6 +48,7 @@ class Media1Module extends CmfModule {
 			$site              = $system = $ui->getMenu('system');
 			$menu              = $site->getMenu('media', __('Attachments'), 2);
 			$menu->icon        = '&#xe60b;';
+			$menu->iconStyle   = 'color:red';
 			$menu->data['url'] = App::url('media');
 		}
 	}
