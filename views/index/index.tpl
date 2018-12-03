@@ -1,7 +1,7 @@
 <section class="hbox stretch wulaui" id="core-account-workset">
     <aside class="aside aside-sm b-r">
         <section class="vbox">
-            <header class="header bg-light b-b">
+            <header class="header bg-light lt b-b">
                 <button class="btn btn-icon btn-default btn-sm pull-right visible-xs m-r-xs" data-toggle="class:show"
                         data-target="#core-role-wrap">
                     <i class="fa fa-reorder"></i>
@@ -38,7 +38,7 @@
         <section class="hbox stretch">
             <aside class="aside b-r" id="admin-grid">
                 <section class="vbox wulaui" id="core-users-workset">
-                    <header class="bg-light header b-b clearfix">
+                    <header class="bg-light header lt b-b clearfix">
                         <div class="row m-t-sm">
                             <div class="col-sm-6 m-b-xs">
                                 <a class="btn btn-sm btn-success edit-admin" id="upload">
