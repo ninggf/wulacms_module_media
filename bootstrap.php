@@ -44,9 +44,8 @@ class Media1Module extends CmfModule {
      */
     public static function initUI(DashboardUI $ui) {
         $passport = whoami('admin');
-        if ($passport->cando('m:media')) {
-            $site              = $ui->getMenu('site', '网站', 1);
-            $site->icon        = '&#xe617;';
+        if ($passport->cando('m:system') && $passport->cando('m:media')) {
+            $site              = $system = $ui->getMenu('system');
             $menu              = $site->getMenu('media', __('Attachments'), 2);
             $menu->icon        = '&#xe60b;';
             $menu->iconStyle   = 'color:red';
