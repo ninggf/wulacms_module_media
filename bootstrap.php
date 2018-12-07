@@ -4,6 +4,7 @@ namespace media;
 
 use backend\classes\DashboardUI;
 use backend\form\Plupload;
+use media\classes\FtpUploader;
 use media\classes\MediaSetting;
 use wula\cms\CmfModule;
 use wulaphp\app\App;
@@ -92,6 +93,21 @@ class Media1Module extends CmfModule {
         }
 
         return $uploader;
+    }
+
+    /**
+     *
+     * @param $uploaders
+     *
+     * @filter upload\regUploaders
+     * @return array
+     */
+    public static function regUploader(array $uploaders) {
+        if (extension_loaded('ftp')) {
+            $uploaders['ftp'] = new FtpUploader();
+        }
+
+        return $uploaders;
     }
 
     /**
