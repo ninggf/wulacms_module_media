@@ -4,10 +4,11 @@ namespace media;
 
 use backend\classes\DashboardUI;
 use backend\form\Plupload;
-use media\classes\FtpUploader;
+use media\classes\AliOssUploader;
 use media\classes\MediaSetting;
 use wula\cms\CmfModule;
 use wulaphp\app\App;
+use wulaphp\io\FtpUploader;
 use wulaphp\io\LocaleUploader;
 
 /**
@@ -15,7 +16,7 @@ use wulaphp\io\LocaleUploader;
  *
  * @group cms
  */
-class Media1Module extends CmfModule {
+class MediaModule extends CmfModule {
     public function getName() {
         return '媒体库';
     }
@@ -106,6 +107,9 @@ class Media1Module extends CmfModule {
         if (extension_loaded('ftp')) {
             $uploaders['ftp'] = new FtpUploader();
         }
+        $uploaders['alioss'] = new AliOssUploader();
+
+        //$uploaders['qiniu']  = new QiNiuUploader();
 
         return $uploaders;
     }
@@ -133,4 +137,4 @@ class Media1Module extends CmfModule {
     }
 }
 
-App::register(new Media1Module());
+App::register(new MediaModule());

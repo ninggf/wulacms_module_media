@@ -12,7 +12,6 @@ namespace media\controllers;
 
 use backend\classes\BackendController;
 use backend\form\Plupload;
-use media\classes\model\Media;
 use wulaphp\app\App;
 
 /**
@@ -21,16 +20,12 @@ use wulaphp\app\App;
  * @acl     m:media
  */
 class UploadController extends BackendController {
-	use Plupload;
+    use Plupload;
 
-	public function index() {
-		$maxSize = App::icfgn('max_upload@media', 20) * 1024 * 1000;
-		$rst     = $this->upload(null, $maxSize);
-		if ($rst['done']) {
-			$media_model = new Media();
-			$media_model->newFile($rst, $this->passport->uid);
-		}
+    public function index() {
+        $maxSize = App::icfgn('max_upload@media', 20) * 1024 * 1000;
+        $rst     = $this->upload(null, $maxSize);
 
-		return $rst;
-	}
+        return $rst;
+    }
 }

@@ -111,7 +111,7 @@ class MediaSettingForm extends FormTable {
      * 水印图片(只能是png哦)
      * @var \backend\form\FileUploaderField
      * @type string
-     * @option {"width":120,"height":60,"auto":1,"maxFileSize":"10kb","noWater":1,"exts":"png","url":"media/watermark","local":1}
+     * @option {"width":120,"height":60,"auto":1,"maxFileSize":"1kb","noWater":1,"exts":"png","url":"media/watermark","local":1}
      * @layout 6,col-xs-4
      */
     public $watermark;
@@ -141,7 +141,7 @@ class MediaSettingForm extends FormTable {
      * @callback (checkParams(default_uploader)) => 配置出错，无法连接服务器！
      * @layout    8,col-xs-8
      * @note      上传器参数配置，请根据提示修改具体参数。
-     * @option    row=10
+     * @option    row=7
      */
     public $params;
 

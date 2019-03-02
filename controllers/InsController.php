@@ -10,9 +10,8 @@
 
 namespace media\controllers;
 
-use backend\classes\IFramePageController;
+use backend\classes\BackendController;
 use backend\form\Plupload;
-use media\classes\model\Media;
 use wulaphp\app\App;
 
 /**
@@ -20,20 +19,16 @@ use wulaphp\app\App;
  * @package media\controllers
  * @acl     m:media
  */
-class InsController extends IFramePageController {
-	use Plupload;
+class InsController extends BackendController {
+    use Plupload;
 
-	public function index() {
-		$max_upload = App::icfgn('max_upload@media', 20);
-		$rst        = $this->upload(null, $max_upload * 1024 * 1000);
-		if (isset($rst['error'])) {
-			return ['done' => 0];
-		}
-		if ($rst['done']) {
-			$media_model = new Media();
-			$media_model->newFile($rst, $this->passport->uid);
-		}
+    public function index() {
+        $max_upload = App::icfgn('max_upload@media', 20);
+        $rst        = $this->upload(null, $max_upload * 1024 * 1000);
+        if (isset($rst['error'])) {
+            return ['done' => 0];
+        }
 
-		return $rst;
-	}
+        return $rst;
+    }
 }
