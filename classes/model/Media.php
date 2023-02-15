@@ -32,7 +32,7 @@ use wulaphp\db\Table;
 
 class Media extends Table {
 
-	public function create($data) {
+	public function createRecord($data) {
 		return $this->insert($data);
 	}
 

@@ -29,11 +29,11 @@ class AliOssUploader extends Uploader {
         }
     }
 
-    public function getName() {
+    public function getName():string {
         return '阿里云OSS';
     }
 
-    public function save($filepath, $path = null) {
+    public function save(string $filepath, ?string  $path = null) {
         if ($this->ossClient) {
             $pathinfo = pathinfo($filepath);
             $ext      = strtolower(strrchr($filepath, '.'));
